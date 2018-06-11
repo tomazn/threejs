@@ -7,26 +7,28 @@ import 'three/examples/js/controls/PointerLockControls';
 
 let camera, scene, renderer, geometry, material, mesh, controls;
 
+var earth,sun;
+
 function init() {
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
-    for (var x = 0; x<30; x++){
-        for (var y = 0; y<30; y++){
-            var geometry = new THREE.BoxGeometry(2,2,2);
-            var material = new THREE.MeshBasicMaterial({
-                color: Math.floor(Math.random() * 16777215)
-            });
-            var mesh = new THREE.Mesh(geometry, material);
-            mesh.position.x -= x * 2;
-            mesh.position.z -= y * 2;
-            mesh.position.y = -2;
+    var sunGeometry = new THREE.SphereBufferGeometry( 5, 32, 32 );
+    var sunMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    sun = new THREE.Mesh( sunGeometry, sunMaterial );
 
-            scene.add(mesh);
-        }
+    var earthGeometry = new THREE.SphereBufferGeometry( 2, 32, 32  );
+    var earthMaterial = new THREE.MeshBasicMaterial( {color: 0x009fdb} );
+    earth = new THREE.Mesh( earthGeometry, earthMaterial );
 
-    }
+    earth.position.x = 30;
+
+    sun.add(earth);
+
+    scene.add( sun );
+    scene.add( earth );
+
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -75,6 +77,15 @@ document.onkeyup = function(e){
 function animate() {
     requestAnimationFrame(animate);
 
+    var sphereContainer = new THREE.Object3D();
+    sphereContainer.add( earth );
+    sphereContainer.position.copy( sun.position );
+
+    scene.add( sphereContainer );
+
+    earth.rotation.y += 10; // rotate around its own axis
+    sphereContainer.rotation.y += 10; // rotate around cube
+
     var delta = clock.getDelta();
     var speed = 10;
 
@@ -113,3 +124,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 init();
 animate();
 
+/*
+var texture = THREE.TextureLoader().load('path');
+var material = new THREE.MeshBasicMaterial({
+    map : texture
+})
+*/
