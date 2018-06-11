@@ -1,9 +1,11 @@
 // three.js
 import * as THREE from 'three';
+import 'three/examples/js/controls/PointerLockControls';
 
 var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,100000);
 camera.position.z = 30;
 camera.position.y = 10;
+camera.position.x = -30;
 
 var scene = new THREE.Scene();
 
@@ -31,27 +33,7 @@ document.body.appendChild(renderer.domElement);
 
 renderer.render(scene,camera);
 
-function animate(){
 
-    requestAnimationFrame(animate);
-
-
-    onmousemove = function(e){
-
-
-        if(e.pageX > window.innerWidth/2){
-            camera.position.x += (e.pageX * 1) /2000;
-        }else{
-            camera.position.x -= (e.pageX * 1) /1000;
-        }
-
-
-
-
-    }
-
-
-    renderer.render(scene,camera);
-}
-
-animate();
+//Mouse view controls
+var controls = new THREE.PointerLockControls(camera);
+scene.add(controls.getObject());
