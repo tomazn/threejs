@@ -1,19 +1,26 @@
 // three.js
 import * as THREE from 'three';
 
-var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,10000);
-camera.position.z = 1000;
+var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,100000);
+camera.position.z = 30;
+camera.position.y = 10;
 
 var scene = new THREE.Scene();
 
-var parent = new THREE.Mesh(new THREE.BoxGeometry(200,200,200), new THREE.MeshBasicMaterial({color: 0xff0000}));
+for(var x =0;x<30;x++){
+    for(var y=0;y<30;y++){
+        var geometry = new THREE.BoxGeometry(2,2,2);
+        var material = new THREE.MeshBasicMaterial({
+            color: Math.floor(Math.random() * 16777215)
+        });
+        var mesh = new THREE.Mesh(geometry,material);
+        mesh.position.x -= x*2;
+        mesh.position.z -= y*2;
+        mesh.position.y = -2;
 
-var child = new THREE.Mesh(new THREE.BoxGeometry(200,200, 200), new THREE.MeshBasicMaterial({color: 0x00ff00}));
-
-child.position.x = 300;
-
-scene.add(parent);
-parent.add(child);
+        scene.add(mesh);
+    }
+}
 
 new THREE.Object3D();
 
@@ -28,21 +35,21 @@ function animate(){
 
     requestAnimationFrame(animate);
 
-    child.rotation.x += 0.01;
-    child.rotation.y += 0.01;
 
-    onmousedown = function(e){
-        onmousemove = function(e){
-            mesh.position.x = e.pageX - 540;
-            mesh.position.y = -e.pageY + 300;
+    onmousemove = function(e){
+
+
+        if(e.pageX > window.innerWidth/2){
+            camera.position.x += (e.pageX * 1) /2000;
+        }else{
+            camera.position.x -= (e.pageX * 1) /1000;
         }
+
+
+
+
     }
 
-    onmouseup = function(e){
-        onmousemove = function(e){
-
-        }
-    }
 
     renderer.render(scene,camera);
 }
