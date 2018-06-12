@@ -19,7 +19,9 @@ function init() {
     sun = new THREE.Mesh( sunGeometry, sunMaterial );
 
     var earthGeometry = new THREE.SphereBufferGeometry( 2, 32, 32  );
-    var earthMaterial = new THREE.MeshBasicMaterial( {color: 0x009fdb} );
+    var earthMaterial = new THREE.MeshPhongMaterial( { color: 0x009fdb, shininess: 90 } );
+
+
     earth = new THREE.Mesh( earthGeometry, earthMaterial );
 
     earth.position.x = 30;
@@ -28,6 +30,10 @@ function init() {
 
     scene.add( sun );
     scene.add( earth );
+
+    var light = new THREE.PointLight( 0xffffff, 1, 5000 );
+    light.position.set( 0, 0, 0 );
+    scene.add( light );
 
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -73,18 +79,23 @@ document.onkeyup = function(e){
     keys[e.keyCode] = false;
 };
 
+function rotateAboutWorldAxis(object, axis, angle) {
+    var rotationMatrix = new THREE.Matrix4();
+    rotationMatrix.makeRotationAxis( axis.normalize(), angle );
+    var currentPos = new THREE.Vector4(object.position.x, object.position.y, object.position.z, 1.5);
+    var newPos = currentPos.applyMatrix4(rotationMatrix);
+    object.position.x = newPos.x;
+    object.position.y = newPos.y;
+    object.position.z = newPos.z;
+}
 
 function animate() {
     requestAnimationFrame(animate);
 
-    var sphereContainer = new THREE.Object3D();
-    sphereContainer.add( earth );
-    sphereContainer.position.copy( sun.position );
-
-    scene.add( sphereContainer );
-
     earth.rotation.y += 10; // rotate around its own axis
-    sphereContainer.rotation.y += 10; // rotate around cube
+
+    var yAxis = new THREE.Vector3(0, 20,0);
+    rotateAboutWorldAxis(earth,yAxis,Math.PI / 180);
 
     var delta = clock.getDelta();
     var speed = 10;
@@ -124,9 +135,3 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 init();
 animate();
 
-/*
-var texture = THREE.TextureLoader().load('path');
-var material = new THREE.MeshBasicMaterial({
-    map : texture
-})
-*/
