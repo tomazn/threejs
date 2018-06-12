@@ -19,15 +19,28 @@ function init() {
     sun = new THREE.Mesh( sunGeometry, sunMaterial );
 
     var earthGeometry = new THREE.SphereBufferGeometry( 2, 32, 32  );
-    var earthMaterial = new THREE.MeshPhongMaterial( { color: 0x009fdb, shininess: 90 } );
+    var earthMaterial = new THREE.MeshPhongMaterial( { color: 0x009fdb, shininess: 100 } );
 
 
     earth = new THREE.Mesh( earthGeometry, earthMaterial );
 
     earth.position.x = 30;
 
-    sun.add(earth);
+   var geometry = new THREE.BufferGeometry();
+   var vertices = new Float32Array([
+      -20, -20, 20,
+       20, -20, 20,
+       -20, 20, 20,
+        20,20,20
+   ]);
 
+   geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+   var material = new THREE.MeshBasicMaterial({ color : 0xff0000, side : THREE.DoubleSide});
+   var mesh = new THREE.Mesh(geometry,material);
+
+   scene.add(mesh);
+
+    sun.add(earth);
     scene.add( sun );
     scene.add( earth );
 
