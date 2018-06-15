@@ -19,18 +19,10 @@ function init() {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
 
-    var myUniforme = {
-        time : {
-            value : 0
-        },
-        light : {
-            value: new THREE.Vector3(0.0,1.0,2.0)
-        }
-    }
+
 
     var sunGeometry = new THREE.SphereBufferGeometry( 2, 32, 32 );
     var sunMaterial = new THREE.ShaderMaterial( {
-        uniform : myUniforme,
         vertexShader : baseVertex,
         fragmentShader : baseFragment
     } );
@@ -70,11 +62,6 @@ function init() {
         element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
         element.requestPointerLock();
     }, false);
-
-    setTimeout(function(){
-        var audio = new Audio(tsukuyomi);
-        audio.play();
-    })
 
 }
 
