@@ -18,11 +18,17 @@ function init() {
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
+    camera.position.z = 40;
 
-
+    var uniforms = {
+        light : {
+            value: new THREE.Vector3(1.0,0.2,1.0)
+        }
+    };
 
     var sunGeometry = new THREE.SphereBufferGeometry( 2, 32, 32 );
     var sunMaterial = new THREE.ShaderMaterial( {
+        uniforms : uniforms,
         vertexShader : baseVertex,
         fragmentShader : baseFragment
     } );

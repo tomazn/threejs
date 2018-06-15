@@ -1,4 +1,5 @@
 varying vec3 vNormal;
+uniform vec3 light;
 
 void main(){
 vNormal = normal;
